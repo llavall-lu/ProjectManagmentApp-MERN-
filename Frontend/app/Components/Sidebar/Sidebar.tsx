@@ -201,6 +201,10 @@ const SidebarStyle = styled.nav`
     width: 0.3rem;
   }
 
+  >button {
+    margin: 1.5rem;
+  }
+
   `;
 
 export default Sidebar
