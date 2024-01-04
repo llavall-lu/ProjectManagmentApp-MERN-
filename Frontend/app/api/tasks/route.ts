@@ -2,6 +2,7 @@ import prisma from "@/app/utils/connect";
 import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 
+
 export async function POST(req: Request){
     try{
 
@@ -42,6 +43,19 @@ export async function POST(req: Request){
 
 export async function GET(req: Request){
     try{
+
+        const { userId } =auth();
+
+        if (!userId) {
+            return NextResponse.json({error: "Not Authorized"}, {status: 401, statusText: "Not Authorized"})
+        }
+
+        const tasks = await prisma.tasks.findMany({
+            where: { userId, },
+        })
+        
+        return NextResponse.json(tasks); 
+        
     } catch (error) {
         console.log("Error Getting Task: ", error);
         return NextResponse.json({error: "Error Getting Task"}, {status: 500, statusText: "Server Error"})

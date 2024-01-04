@@ -5,6 +5,8 @@ import styled from 'styled-components';
 import Image from 'next/image';
 import menu from '@/app/utils/menu';
 import { usePathname, useRouter } from 'next/navigation';
+import Button from '@/app/Components/Button/btn';
+import { signout } from '@/app/utils/icons';
 
 
 
@@ -46,7 +48,18 @@ const pathName = usePathname();
         );
       })}
     </ul>
-    <button>Signout</button>
+    <div className="signOut">
+      <Button
+        name={"Sign Out"}
+        background={theme.colorRed}
+        padding={"0.8rem 1rem"}
+        borderRadius={"0.5rem"}
+        fontWeight={"500"}
+        fontSize={"1rem"}
+
+        icon={signout}
+      />
+    </div>
   </SidebarStyle>
   );
 }
@@ -203,6 +216,13 @@ const SidebarStyle = styled.nav`
 
   >button {
     margin: 1.5rem;
+  }
+  
+  .signOut {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
   }
 
   `;
