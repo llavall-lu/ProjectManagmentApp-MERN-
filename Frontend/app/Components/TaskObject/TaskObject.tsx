@@ -9,25 +9,27 @@ interface Props {
     title: string;
     description: string;
     date: string;
-    IsCompleted: boolean;
+    isCompleted: boolean;
     id: string;
 }
 
 
-function TaskObject({title, description, date, IsCompleted, id}: Props) {
-    const {theme} = useGlobalState();
-  return (
+function TaskObject({title, description, date, isCompleted, id}: Props) {
+    const {theme, deleteTask} = useGlobalState();
+    return (
     <TaskItemStyle theme={theme}>
         <h1>{title}</h1>
         <p>{description}</p>
         <p className='date'>{dateFormat(date)}</p>
         <div className="taskbtm">
-            {IsCompleted ?(<button className='completed'>Completed</button>) : (<button className='Incompleted'>Incomplete</button>)}
+            {isCompleted ?(<button className='completed'>Completed</button>) : (<button className='Incompleted'>Incomplete</button>)}
             <button className="edit">{edit}</button>
-            <button className="delete">{trash}</button>
+            <button className="delete" onClick={() =>{
+                deleteTask(id);
+            }}>{trash}</button>
         </div>
     </TaskItemStyle>
-  )
+    )
 }
 
 const TaskItemStyle = styled.div`
@@ -55,12 +57,12 @@ const TaskItemStyle = styled.div`
         display: flex;
         gap: 1.4rem;
         align-items: center;
-    }
+    
     button {
         border: none;
         outline: none;
         cursor: pointer;
-    }
+    
     i {
         font-size: 1.4rem;
         color: ${(props) => props.theme.colorGrey2};
@@ -68,6 +70,7 @@ const TaskItemStyle = styled.div`
         &:hover {
             opacity: 0.6;
             transition: all 0.55s ease;
+            }
         }
     }
     .edit{
@@ -86,9 +89,11 @@ const TaskItemStyle = styled.div`
         }
     }
 
-    .completed {
-        background: ${(props) => props.theme.colorBtnGreen};
+        .completed {
+            background: ${(props) => props.theme.colorBtnGreen} !important;
+        }
     }
+}
 `;
 
 export default TaskObject

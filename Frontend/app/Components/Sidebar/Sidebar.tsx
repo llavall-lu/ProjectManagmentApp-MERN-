@@ -39,7 +39,9 @@ const pathName = usePathname();
         const link = item.link;
 
         return (
-        <li className={`nav-item ${pathName === link ? 'active' : ''}`}
+        <li 
+        key={item.id}
+        className={`nav-item ${pathName === link ? 'active' : ''}`}
         onClick={() => handleClick(link)}
         >
           {item.icon}

@@ -4,6 +4,7 @@ import React from 'react'
 import styled from 'styled-components'
 import TaskObject from '../TaskObject/TaskObject';
 import { plus } from '@/app/utils/icons';
+import CreateTask from '../modal/CreateTask';
 
 interface Props {
   title: string;
@@ -11,27 +12,31 @@ interface Props {
 }
 
 function tasks({ title, tasks }: Props) {
-    const {theme} = useGlobalState()
+    const {theme,isLoading} = useGlobalState()
+
+   // const isLoading = true; //TODO: uncomment this line to enable the loading spinner for testing
 
   return (
     <TaskStyle theme={theme}>
+ <CreateTask />
       <h1>{title}</h1>
-      <div className="tasks grid">
-        {tasks.map((task) => (
-          <TaskObject 
-            key={task.id}
-            title={task.title}
-            description={task.description}
-            date={task.date}
-            IsCompleted={task.IsCompleted}
-            id={task.id}
-          />
-        ))}
-        <button className="create-task">
-          {plus}
-          Add Task
-        </button>
-      </div>
+    <div className="tasks grid">
+      {tasks.map((task) => (
+        <TaskObject 
+          key={task.id}
+          title={task.title}
+          description={task.description}
+          date={task.date}
+          isCompleted={task.isCompleted}
+          id={task.id}
+        />
+      ))}
+      <button className="create-task">
+        {plus}
+        Add Task
+      </button>
+    </div> 
+
     </TaskStyle>
   );
 }

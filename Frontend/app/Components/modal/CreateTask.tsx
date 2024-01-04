@@ -58,7 +58,7 @@ const handleSubmit = async (e: any) => {
 };
 
 
-  return (
+    return (
     <form onSubmit={handleSubmit}>
         <h1>Create a Task</h1>
         <div className="input-control">
