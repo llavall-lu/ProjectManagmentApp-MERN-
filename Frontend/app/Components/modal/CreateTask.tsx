@@ -11,7 +11,8 @@ import { plus } from '@/app/utils/icons';
 function CreateTask() {
 const [title, setTitle] = useState('')
 const [description, setDescription] = useState('')
-const [date, setDate] = useState('')
+const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
+const [time, setTime] = useState('00:00:00');
 const [completed, setCompleted] = useState(false)
 const [important, setImportant] = useState(false)
 const {theme, allTasks, closeModal} = useGlobalState();
@@ -28,6 +29,9 @@ const handlechange =  (name: string) => (e: any) => {
         case 'date':
             setDate(e.target.value)
             break;
+        case 'time': // Update the time when the time input changes
+            setTime(e.target.value)
+            break;
         case 'completed':
             setCompleted(e.target.checked)
             break;
@@ -42,11 +46,11 @@ const handlechange =  (name: string) => (e: any) => {
 const handleSubmit = async (e: any) => {
     console.log("handleSubmit called");
     e.preventDefault();
-
+    const taskDate = `${date}T${time}${new Date().getTimezoneOffset() < 0 ? '+' : '-'}${Math.abs(new Date().getTimezoneOffset() / 60).toString().padStart(2, '0')}:00`; 
     const task = {
         title,
         description,
-        date,
+        date: taskDate,
         completed,
         important
     };
@@ -106,12 +110,17 @@ const handleSubmit = async (e: any) => {
                 />
             </div>
 
-
-
-
-
-
-
+            <div className="input-control">
+            <label htmlFor="time">Time</label>
+            <input 
+            type="time"
+                id='time'
+                value={time}
+                name='time'
+                onChange={handlechange('time')}
+                step="1" 
+                />
+        </div>
 
             <div className="input-control checkbox">
                 <label htmlFor="completed">Toggle Completed</label>
