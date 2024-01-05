@@ -1,3 +1,4 @@
+
 import prisma from "@/app/utils/connect";
 import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
@@ -62,18 +63,25 @@ export async function GET(req: Request){
     }
 }
 
-export async function UPDATE(req: Request){
+export async function PUT(req: Request){
     try{
+    const { userId } =auth();
+    const { isCompleted, id } = await req.json();
+    if(!userId){
+        return NextResponse.json({error: "Not Authorized"}, {status: 401, statusText: "Not Authorized"})
+    }
+
+    const tasks = await prisma.tasks.update({
+        where: {
+            id,
+        },
+        data: {
+            isCompleted,
+        },
+        });
+    return NextResponse.json(tasks, {status: 200, statusText: "Updated"})
     } catch (error) {
         console.log("Error Updating Task: ", error);
         return NextResponse.json({error: "Error Updating Task"}, {status: 500, statusText: "Server Error"})
-    }
-}
-
-export async function DELETE(req: Request){
-    try{
-    } catch (error) {
-        console.log("Error Deleting Task: ", error);
-        return NextResponse.json({error: "Error Deleting Task"}, {status: 500, statusText: "Server Error"})
     }
 }

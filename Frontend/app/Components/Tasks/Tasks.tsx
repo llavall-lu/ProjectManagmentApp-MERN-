@@ -3,8 +3,10 @@ import { useGlobalState } from '@/app/context/GlobalContextProvider'
 import React from 'react'
 import styled from 'styled-components'
 import TaskObject from '../TaskObject/TaskObject';
-import { plus } from '@/app/utils/icons';
+import { plusA } from '@/app/utils/icons';
 import CreateTask from '../modal/CreateTask';
+import Modal from '../modal/Modal';
+
 
 interface Props {
   title: string;
@@ -12,13 +14,15 @@ interface Props {
 }
 
 function tasks({ title, tasks }: Props) {
-    const {theme,isLoading} = useGlobalState()
+    const {theme, isLoading, openModal, modal} = useGlobalState();
 
    // const isLoading = true; //TODO: uncomment this line to enable the loading spinner for testing
 
   return (
     <TaskStyle theme={theme}>
- <CreateTask />
+{/* <CreateTask /> */} 
+
+{modal && <Modal taskContent={<CreateTask />} />}
       <h1>{title}</h1>
     <div className="tasks grid">
       {tasks.map((task) => (
@@ -31,8 +35,8 @@ function tasks({ title, tasks }: Props) {
           id={task.id}
         />
       ))}
-      <button className="create-task">
-        {plus}
+      <button className="create-task" onClick={openModal}>
+        {plusA}
         Add Task
       </button>
     </div> 

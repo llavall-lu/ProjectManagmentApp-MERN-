@@ -6,13 +6,19 @@ import Image from 'next/image';
 import menu from '@/app/utils/menu';
 import { usePathname, useRouter } from 'next/navigation';
 import Button from '@/app/Components/Button/btn';
-import { signout } from '@/app/utils/icons';
+import { arrowLeft, navbars, signout } from '@/app/utils/icons';
+import { UserButton, useClerk, useUser } from '@clerk/nextjs';
 
 
 
 function Sidebar() {
-  const {theme} = useGlobalState();
+  const {theme, collapsed, collapsedSidebar} = useGlobalState();
+  const { signOut } = useClerk();
+  const { user } = useUser();
+  console.log(user);
 
+
+  const { firstName, lastName, imageUrl} = user || {firstName: "", lastName: "", imageUrl: ""}
 const router = useRouter();
 const pathName = usePathname();
 
@@ -22,15 +28,20 @@ const pathName = usePathname();
 
   console.log(theme);
 
-  return ( <SidebarStyle theme={theme}>
+  return ( <SidebarStyle theme={theme} collapsed={collapsed}>
+    <button className="nav-toggle" onClick={collapsedSidebar}>
+      {collapsed ? navbars : arrowLeft}
+    </button>
     <div className='profile'>
       <div className='profile-overlay'></div>
       <div className='image'>
-        <Image width={70} height={70} src="/ProfilePlaceholder.jpg" alt="profile" />
+        <Image width={70} height={70} src={imageUrl} alt="profile" />
       </div>
-      <h1>
-          <span>Tom </span>
-          <span>Ross</span>
+        <div className="user-btn absolute z-20 top-0 w-full h-full">
+          <UserButton/>
+        </div>
+      <h1 className='capitalize'>
+          {firstName} {lastName}
       </h1>
     </div>
     <ul className='nav-items'>
@@ -50,7 +61,7 @@ const pathName = usePathname();
         );
       })}
     </ul>
-    <div className="signOut">
+    <div className="signOut cl-userButtonPopoverActionButton__signOut">
       <Button
         name={"Sign Out"}
         background={theme.colorRed}
@@ -58,8 +69,8 @@ const pathName = usePathname();
         borderRadius={"0.5rem"}
         fontWeight={"500"}
         fontSize={"1rem"}
-
         icon={signout}
+        click={() => signOut(() => router.push("/signin"))}
       />
     </div>
   </SidebarStyle>
@@ -67,7 +78,7 @@ const pathName = usePathname();
 }
 
 
-const SidebarStyle = styled.nav`
+const SidebarStyle = styled.nav<{collapsed: boolean}>`
   position: relative;
   width: ${(props) => props.theme.sidebarWidth};
   background-color: ${(props) => props.theme.colorBg2};
@@ -77,6 +88,51 @@ const SidebarStyle = styled.nav`
   flex-direction: column;
   justify-content: space-between;
   color: ${(props) => props.theme.colorGrey3};
+
+  @media screen and (max-width: 768px) {
+    position: fixed;
+    height: calc(100vh - 2rem);
+    z-index: 100;
+
+    transition: all 0.3s ease-in-out;
+    transform: ${(props) =>
+      props.collapsed ? "translateX(-100%)" : "translateX(0)"};
+
+    .nav-toggle {
+      display: block !important;
+    }
+  }
+  .nav-toggle {
+    display: none;
+  position: absolute;
+  top: 5rem;
+  right: -3rem;
+  padding: 1rem;
+  border-top-right-radius: 1rem;
+  border-bottom-right-radius: 1rem;
+  background-color: ${(props) => props.theme.colorBg2};
+  border-right: 2px solid ${(props) => props.theme.borderColor2};
+  }
+
+
+
+  .user-btn { 
+    .cl-rootBox{
+      width: 100%;
+      height: 100%;
+
+      .cl-userButtonBox{
+        width: 100%;
+        height: 100%;
+
+        .cl-userButtonTrigger{
+          width: 100%;
+          height: 100%;
+          opacity: 0;
+        }
+      }
+    }
+  }
 
   .profile {
     margin: 1.5rem;
@@ -88,6 +144,7 @@ const SidebarStyle = styled.nav`
     color: ${(props) => props.theme.colorGrey0};
     display: flex;
     align-items: center;
+    
 
     .profile-overlay {
       position: absolute;
@@ -133,7 +190,7 @@ const SidebarStyle = styled.nav`
     }
 
     > h1 {
-      margin-left: 1rem;
+      margin-left: .3rem;
       font-size: clamp(1.2rem, 4vw, 1.4rem);
       line-height: 100%;
     }

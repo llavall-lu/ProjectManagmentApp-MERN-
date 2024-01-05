@@ -15,14 +15,30 @@ interface Props {
 
 
 function TaskObject({title, description, date, isCompleted, id}: Props) {
-    const {theme, deleteTask} = useGlobalState();
+    const {theme, deleteTask, updateTask} = useGlobalState();
     return (
     <TaskItemStyle theme={theme}>
         <h1>{title}</h1>
         <p>{description}</p>
         <p className='date'>{dateFormat(date)}</p>
         <div className="taskbtm">
-            {isCompleted ?(<button className='completed'>Completed</button>) : (<button className='Incompleted'>Incomplete</button>)}
+            {isCompleted ?(
+            <button className='completed' 
+            onClick={() =>{
+                const tasks = {
+                    id,
+                    isCompleted: !isCompleted,
+                };
+                updateTask(tasks);
+            }}>Completed</button>) : (<button className='Incompleted'
+            onClick={() =>{
+                const tasks = {
+                    id,
+                    isCompleted: !isCompleted,
+                };
+                updateTask(tasks);
+            }}
+            >Incomplete</button>)}
             <button className="edit">{edit}</button>
             <button className="delete" onClick={() =>{
                 deleteTask(id);

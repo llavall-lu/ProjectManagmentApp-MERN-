@@ -18,21 +18,42 @@ export const GlobalProvider = ({ children }) => {
     const theme = themes[selectedTheme];
     const [isLoading, setIsLoading] = useState(false);
     const [tasks, setTasks] = useState([]);
+    const [modal, setModal] = useState(false);
+    const [collapsed, setCollapsed] = useState(false);
+
+    const openModal = () => {
+        setModal(true);
+    };
+
+    const closeModal = () => {
+        setModal(false);
+    };
+
+const collapsedSidebar = () => {
+    setCollapsed(!collapsed);
+};
+
 
 const allTasks = async () => {
     setIsLoading(true);
     try {
         const response = await axios.get("/api/tasks");
 
-        setTasks(response.data);
+        const sorted = response.data.sort((a, b) => {
+            return(
+                new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+            );
+        });
+
+        console.log(sorted);
+
+        setTasks(sorted);
         console.log(response.data);
         setIsLoading(false);
         
         console.log(response.data);
     } catch (error) {
-        console.error(error.response.data); // Log the server's response
-        console.error(error.response.status); // Log the status code
-        console.error(error.response.headers); // Log the headers
+        console.log(error);
     }
 };
 
@@ -48,11 +69,24 @@ const deleteTask = async (id) => {
     }
     };
 
-    const completedTasks = tasks.filter((task) => task.isCompleted === true);
+const updateTask = async (tasks) => {
+    console.log(tasks)
+    try {
+        const response = await axios.put(`/api/tasks/`, tasks);
+        toast.success("Task updated");
+
+        allTasks();
+    } catch (error) {
+        console.log(error);
+        toast.error("Something went wrong");
+    }
+};
+
+    const completedTasks = tasks.filter((tasks) => tasks.isCompleted === true);
     console.log(completedTasks);
-    const importantTasks = tasks.filter((task) => task.isImportant === true);
+    const importantTasks = tasks.filter((tasks) => tasks.isImportant === true);
     console.log(importantTasks);
-    const incompleteTasks = tasks.filter((task) => task.isCompleted === false);
+    const incompleteTasks = tasks.filter((tasks) => tasks.isCompleted === false);
     console.log(incompleteTasks);
 
     React.useEffect(() => {
@@ -68,6 +102,13 @@ const deleteTask = async (id) => {
             completedTasks,
             importantTasks,
             incompleteTasks,
+            updateTask,
+            modal,
+            openModal,
+            closeModal,
+            allTasks,
+            collapsed,
+            collapsedSidebar,
             }}>
 
 
