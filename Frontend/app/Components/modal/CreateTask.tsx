@@ -2,7 +2,7 @@
 
 import { useGlobalState } from '@/app/context/GlobalContextProvider';
 import axios from 'axios';
-import React, { use, useState } from 'react'
+import React, { useState } from 'react'
 import { toast } from 'react-hot-toast';
 import styled from 'styled-components';
 import Button from '../Button/btn';
@@ -16,6 +16,8 @@ const [time, setTime] = useState('00:00:00');
 const [completed, setCompleted] = useState(false)
 const [important, setImportant] = useState(false)
 const {theme, allTasks, closeModal} = useGlobalState();
+const [titleError, setTitleError] = useState('');
+const [descriptionError, setDescriptionError] = useState('');
 
 const handlechange =  (name: string) => (e: any) => {
 
@@ -46,11 +48,40 @@ const handlechange =  (name: string) => (e: any) => {
 const handleSubmit = async (e: any) => {
     console.log("handleSubmit called");
     e.preventDefault();
-    const taskDate = `${date}T${time}${new Date().getTimezoneOffset() < 0 ? '+' : '-'}${Math.abs(new Date().getTimezoneOffset() / 60).toString().padStart(2, '0')}:00`; 
+
+    if (title.length < 3) {
+        console.log('Validation triggered');
+        setTitleError('Title must be at least 3 characters long');
+        toast.error('Title must be at least 3 characters long');
+        return;
+      } else {
+        setTitleError('');
+      }
+
+      if (!description) {
+        console.log('Validation triggered');
+        setDescriptionError('Description is required');
+        toast.error('Description is required');
+        return;
+    }else {
+        setDescriptionError('');
+    }
+
+
+
+    const taskDateString = `${date}T${time}${new Date().getTimezoneOffset() < 0 ? '+' : '-'}${Math.abs(new Date().getTimezoneOffset() / 60).toString().padStart(2, '0')}:00`; 
+    const taskDate = new Date(taskDateString);
+    const currentDate = new Date();
+    
+    if (taskDate.getTime() <= currentDate.getTime() + 60000) {
+        toast.error('Task must be at least 1 minute in the future');
+        return;
+    }
+
     const task = {
         title,
         description,
-        date: taskDate,
+        date: taskDate.toISOString(),
         completed,
         important
     };
@@ -74,7 +105,7 @@ const handleSubmit = async (e: any) => {
 
 
     return (
-        <CreateTaskStyle onSubmit={handleSubmit} theme={theme}>
+        <CreateTaskStyle onSubmit={handleSubmit} theme={theme} data-testid="create-task-form">
         <h1>Create a Task</h1>
         <div className="input-control">
             <label htmlFor="title">Title</label>
@@ -85,19 +116,21 @@ const handleSubmit = async (e: any) => {
                 onChange={handlechange('title')}
                 placeholder='YES'
             />
+             {titleError && <p>{titleError}</p>}
         </div>
         
         <div className="input-control">
-            <label htmlFor="description">Description</label>
-            <textarea 
-                value={description}
-                id='description'
-                name='description'
-                onChange={handlechange('description')}
-                rows={4}
-                placeholder='YESDescription'
-            ></textarea>
-        </div>
+    <label htmlFor="description">Description</label>
+    <textarea 
+        value={description}
+        id='description'
+        name='description'
+        onChange={handlechange('description')}
+        rows={4}
+        placeholder='YESDescription'
+    />
+    {descriptionError && <p>{descriptionError}</p>}
+</div>
 
         <div className="input-control">
             <label htmlFor="date">Date</label>
