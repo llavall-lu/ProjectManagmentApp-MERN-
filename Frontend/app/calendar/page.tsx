@@ -55,7 +55,11 @@ const CalendarContainer = styled.div`
   
   .react-calendar__tile {
     font-size: 1.5em; 
-    line-height: 7.5em; 
+    line-height: 7.2em; 
+  }
+  .react-calendar__year-view{
+    font-size: .95em; 
+  
   }
   .react-calendar__navigation button {
     color: ${(props) => props.theme.colorPurple2};
@@ -121,8 +125,12 @@ const CalendarContainer = styled.div`
   border-bottom-right-radius: 6px;
   background: ${(props) => props.theme.colorPurple2};
   color: white;
-
- 
+ }
+ .react-calendar__month-view__weekdays {
+  background: ${(props) => props.theme.colorBg};
+  color: ${(props) => props.theme.colorPurple2};
+  font-size: 1.2em;
+  line-height: 2.5em; 
  }
 `;
 export default Page;

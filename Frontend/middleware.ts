@@ -1,8 +1,9 @@
 import {  authMiddleware } from "@clerk/nextjs"; // import the auth middleware
 
 
-export default authMiddleware({});
-
+export default authMiddleware({
+  publicRoutes: ["/landingPage"]
+});
 export const config = {
-    matcher: ["/((?!_next/image|_next/static|favicon.ico).*)", "/"],
-  };
+  matcher: ['/((?!.+\\.[\\w]+$|_next).*)', '/', '/(api|trpc)(.*)'],
+};

@@ -115,6 +115,9 @@ const SidebarStyle = styled.nav<{collapsed: boolean}>`
   }
 
 
+.cl-internal-wkkub3{
+  display: none;
+}
 
   .user-btn { 
     .cl-rootBox{
