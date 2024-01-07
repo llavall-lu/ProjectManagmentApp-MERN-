@@ -16,8 +16,11 @@ const [time, setTime] = useState('00:00:00');
 const [completed, setCompleted] = useState(false)
 const [important, setImportant] = useState(false)
 const {theme, allTasks, closeModal} = useGlobalState();
-const [titleError, setTitleError] = useState('');
-const [descriptionError, setDescriptionError] = useState('');
+const [titleUError, setU3TitleError] = useState('');
+const [NoDescriptionError, setNoDescriptionError] = useState('');
+const [titleLengthOError, setO32TitleError] = useState('');
+const [descriptionLengthUError, setO200DescriptionError] = useState('');
+const [badDate, setBadDate] = useState('');
 
 const handlechange =  (name: string) => (e: any) => {
 
@@ -51,20 +54,37 @@ const handleSubmit = async (e: any) => {
 
     if (title.length < 3) {
         console.log('Validation triggered');
-        setTitleError('Title must be at least 3 characters long');
+        setU3TitleError('Title must be at least 3 characters long');
         toast.error('Title must be at least 3 characters long');
         return;
       } else {
-        setTitleError('');
+        setU3TitleError('');
       }
 
       if (!description) {
         console.log('Validation triggered');
-        setDescriptionError('Description is required');
+        setNoDescriptionError('Description is required');
         toast.error('Description is required');
         return;
     }else {
-        setDescriptionError('');
+        setNoDescriptionError('');
+    }
+
+       if (title.length > 32) {
+        setO32TitleError('Title must not exceed 32 characters');
+        toast.error('Title must not exceed 32 characters');
+        return;
+    } else {
+        setO32TitleError('');
+    }
+
+    // Description length validation
+    if (description.length > 200) {
+        setO200DescriptionError('Description must not exceed 200 characters');
+        toast.error('Description must not exceed 200 characters');
+        return;
+    } else {
+        setO200DescriptionError('');
     }
 
 
@@ -75,7 +95,11 @@ const handleSubmit = async (e: any) => {
     
     if (taskDate.getTime() <= currentDate.getTime() + 60000) {
         toast.error('Task must be at least 1 minute in the future');
+        setBadDate("Task must be at least 1 minute in the future")
         return;
+    }else{
+        toast.success('Task created successfully');
+        setBadDate("")
     }
 
     const task = {
@@ -116,7 +140,8 @@ const handleSubmit = async (e: any) => {
                 onChange={handlechange('title')}
                 placeholder='YES'
             />
-             {titleError && <p>{titleError}</p>}
+            {titleUError && <p>{titleUError}</p>}
+            {titleLengthOError && <p>{titleLengthOError}</p>}
         </div>
         
         <div className="input-control">
@@ -129,7 +154,8 @@ const handleSubmit = async (e: any) => {
         rows={4}
         placeholder='YESDescription'
     />
-    {descriptionError && <p>{descriptionError}</p>}
+    {NoDescriptionError && <p>{NoDescriptionError}</p>}
+    {descriptionLengthUError && <p>{descriptionLengthUError}</p>}
 </div>
 
         <div className="input-control">
@@ -141,6 +167,7 @@ const handleSubmit = async (e: any) => {
                 name='date'
                 onChange={handlechange('date')}
                 />
+                {badDate && <p>{badDate}</p>}
             </div>
 
             <div className="input-control">

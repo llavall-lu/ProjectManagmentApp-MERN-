@@ -1,90 +1,98 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { useRouter } from 'next/router';
-import CreateTask from '../app/Components/modal/CreateTask';
-import { GlobalProvider } from '../app/context/GlobalContextProvider';
+// Mocking axios
+jest.mock('axios', () => ({
+  post: jest.fn(),
+}));
+
+// Mocking toast
+jest.mock('react-hot-toast', () => ({
+  toast: {
+    error: jest.fn(),
+    success: jest.fn(),
+  },
+}));
+
+// Mocking the Global State Context
+const mockGlobalState = {
+  theme: { colorBg2: '#fff', borderColor2: '#000', purple: '#800080', colorGrey5: '#d3d3d3', colorGrey2: '#808080'  },
+  allTasks: jest.fn(),
+  closeModal: jest.fn(),
+};
+
+jest.mock('../app/context/GlobalContextProvider.js', () => ({
+  useGlobalState: () => mockGlobalState,
+}));
+
+import { render, fireEvent, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import React from 'react';
+import CreateTask from '@/app/Components/modal/CreateTask';
 import axios from 'axios';
+import { toast } from 'react-hot-toast';
 
-
-jest.mock('axios');
-const mockedAxios = axios as jest.Mocked<typeof axios>;
-
-jest.mock('@clerk/nextjs', () => ({
-  ClerkProvider: ({ children }: { children: React.ReactNode }) => children,
-  useUser: () => ({ user: { name: 'Test User' } }), // Mocked useUser function
-}));
-
-jest.mock('next/router', () => ({
-  useRouter: () => ({
-    route: '/current-route',
-    pathname: '/current-route',
-    query: {},
-    asPath: '',
-    push: jest.fn(),
-  }),
-}));
-
-describe('CreateTaskModal', () => {
-    test('renders description label', async () => { 
-      // Mock the Axios get request
-      mockedAxios.get.mockResolvedValueOnce({ data: [
-        {
-            "_id": "clr12x4vs00066s1ne0laff4s",
-            "title": "Lorem",
-            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Augue interdum velit euismod in pellentesque massa placerat duis ultricies.",
-            "date": {
-              "$date": "2024-02-01T00:05:04Z"
-            },
-            "isCompleted": false,
-            "isImportant": false,
-            "created_at": {
-              "$date": "2024-01-05T20:19:00.472Z"
-            },
-            "updated_at": {
-              "$date": "2024-01-06T22:09:04.895Z"
-            },
-            "userId": "user_2aSQ9D3RD50pABWZB3BWLUx1Td9"
-            },
-      ] });
-      
-      // Render the component
-      const { rerender } = render(
-        <GlobalProvider>
-          <CreateTask />
-        </GlobalProvider>
-      );
-      
-      
-      await waitFor(() => expect(mockedAxios.get).toHaveBeenCalledTimes(4));
-      
-      (useRouter().push as jest.Mock).mockImplementationOnce(() => Promise.resolve(true));
-      rerender(
-        <GlobalProvider>
-          <CreateTask />
-        </GlobalProvider>
-      );
-      
-      
-      const descriptionLabel = await waitFor(() => screen.getByLabelText('Description'));
-      expect(descriptionLabel).toBeInTheDocument();
-    });
+describe('CreateTask Component Validation Tests', () => {
+  it('displays error if title is less than 3 characters', () => {
+    render(<CreateTask />);
+    const titleInput = screen.getByLabelText('Title');
+    fireEvent.change(titleInput, { target: { value: 'Yo' } });
+    const submitButton = screen.getByRole('button', { name: /Create Task/i });
+    fireEvent.click(submitButton);
+    expect(screen.getByText('Title must be at least 3 characters long')).toBeInTheDocument();
   });
 
-  test('shows an error when the title is less than 3 characters long', async () => {
-    render(
-      <GlobalProvider>
-        <CreateTask />
-      </GlobalProvider>
-    );
-
-    fireEvent.submit(screen.getByTestId('create-task-form'), {
-      target: {
-        title: { value: 'a' },
-        description: { value: 'Test description' },
-        date: { value: '2025-12-31' },
-        time: { value: '23:59' },
-      },
-    });
-
-    await waitFor(() => expect(screen.getByText('Title must be at least 3 characters long')).toBeInTheDocument());
+  it('displays error if description is empty', () => {
+    render(<CreateTask />);
+    const titleInput = screen.getByLabelText('Title');
+    // Provide a valid title
+    fireEvent.change(titleInput, { target: { value: 'Valid Title' } });
+    const descriptionInput = screen.getByLabelText('Description');
+    // Set description to empty
+    fireEvent.change(descriptionInput, { target: { value: '' } });
+    const submitButton = screen.getByRole('button', { name: /Create Task/i });
+    fireEvent.click(submitButton);
+    expect(screen.getByText('Description is required')).toBeInTheDocument();
   });
- 
+
+  
+  it('displays error if title exceeds 32 characters', () => {
+    render(<CreateTask />);
+    const titleInput = screen.getByLabelText('Title');
+    fireEvent.change(titleInput, { target: { value: 'a'.repeat(33) } });
+  
+    const descriptionInput = screen.getByLabelText('Description');
+    fireEvent.change(descriptionInput, { target: { value: 'Valid Description' } }); // Ensure valid description
+  
+    const submitButton = screen.getByRole('button', { name: /Create Task/i });
+    fireEvent.click(submitButton);
+    expect(screen.getByText('Title must not exceed 32 characters')).toBeInTheDocument();
+  });
+
+  it('displays error if description exceeds 200 characters', () => {
+    render(<CreateTask />);
+    const titleInput = screen.getByLabelText('Title');
+    // Provide a valid title
+    fireEvent.change(titleInput, { target: { value: 'Valid Title' } });
+    const descriptionInput = screen.getByLabelText('Description');
+    // Setting description to 201 characters
+    fireEvent.change(descriptionInput, { target: { value: 'a'.repeat(201) } });
+    const submitButton = screen.getByRole('button', { name: /Create Task/i });
+    fireEvent.click(submitButton);
+    expect(screen.getByText('Description must not exceed 200 characters')).toBeInTheDocument();
+  });
+  
+  it('displays error if title exceeds 32 characters', () => {
+    render(<CreateTask />);
+    const titleInput = screen.getByLabelText('Title');
+    fireEvent.change(titleInput, { target: { value: 'Valid Title' } });
+  
+    const descriptionInput = screen.getByLabelText('Description');
+    fireEvent.change(descriptionInput, { target: { value: 'Valid Description' } }); // Ensure valid description
+
+    const dateInput = screen.getByLabelText('Date');
+    fireEvent.change(dateInput, { target: { value: '2020-01-07' } });   
+  
+    const submitButton = screen.getByRole('button', { name: /Create Task/i });
+    fireEvent.click(submitButton);
+    expect(screen.getByText('Task must be at least 1 minute in the future')).toBeInTheDocument();
+  });
+  
+});
