@@ -37,7 +37,12 @@ const collapsedSidebar = () => {
 const allTasks = async () => {
     setIsLoading(true);
     try {
+        console.log('Making Axios request');
         const response = await axios.get("/api/tasks");
+
+        if (!response) {
+            throw new Error('The Axios request did not return a response');
+          }
 
         const sorted = response.data.sort((a, b) => {
             return(
