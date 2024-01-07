@@ -3,6 +3,7 @@
 import { useGlobalState } from '@/app/context/GlobalContextProvider';
 import axios from 'axios';
 import React, { useState } from 'react'
+import React, { useState } from 'react'
 import { toast } from 'react-hot-toast';
 import styled from 'styled-components';
 import Button from '../Button/btn';
@@ -106,6 +107,7 @@ const handleSubmit = async (e: any) => {
         title,
         description,
         date: taskDate.toISOString(),
+        date: taskDate.toISOString(),
         completed,
         important
     };
@@ -129,6 +131,7 @@ const handleSubmit = async (e: any) => {
 
 
     return (
+        <CreateTaskStyle onSubmit={handleSubmit} theme={theme} data-testid="create-task-form">
         <CreateTaskStyle onSubmit={handleSubmit} theme={theme} data-testid="create-task-form">
         <h1>Create a Task</h1>
         <div className="input-control">
