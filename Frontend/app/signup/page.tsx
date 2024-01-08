@@ -1,23 +1,23 @@
 "use client";
-import React from 'react'
-import { SignUp } from '@clerk/nextjs';
-import styled from 'styled-components';
-import { useRouter } from 'next/navigation'; 
-
+import React from "react";
+import { SignUp } from "@clerk/nextjs";
+import styled from "styled-components";
+import { useRouter } from "next/navigation";
 
 function page() {
-  const router = useRouter(); 
+  const router = useRouter();
 
   const goToLandingPage = () => {
-    router.push('/landingPage'); 
+    router.push("/landingPage");
   };
 
   return (
     <Styledsignup>
-        <StyledButton onClick={goToLandingPage}>Go to Landing Page</StyledButton> {/* Use StyledButton */}
-        <SignUp/>
+      <StyledButton onClick={goToLandingPage}>Go to Landing Page</StyledButton>{" "}
+      {/* Use StyledButton */}
+      <SignUp />
     </Styledsignup>
-  )
+  );
 }
 
 const Styledsignup = styled.div`
@@ -42,14 +42,14 @@ const StyledButton = styled.button`
   cursor: pointer;
 
   border-radius: 5px;
-  transition: box-shadow 0.3s ease; 
-  
-  
-  box-shadow: 0 0 10px #7c41ff, 0 0 20px #7c41ff, 0 0 30px #7c41ff, 0 0 40px #7c41ff;
+  transition: box-shadow 0.3s ease;
 
-  
+  box-shadow: 0 0 10px #7c41ff, 0 0 20px #7c41ff, 0 0 30px #7c41ff,
+    0 0 40px #7c41ff;
+
   &:hover {
-    box-shadow: 0 0 15px #7c41ff, 0 0 25px #7c41ff, 0 0 35px #7c41ff, 0 0 45px #7c41ff;
+    box-shadow: 0 0 15px #7c41ff, 0 0 25px #7c41ff, 0 0 35px #7c41ff,
+      0 0 45px #7c41ff;
   }
 `;
 

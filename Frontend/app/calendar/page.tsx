@@ -1,20 +1,19 @@
 "use client";
-import React from 'react';
-import Calendar from 'react-calendar';
-import 'react-calendar/dist/Calendar.css';
-import styled from 'styled-components';
-import { useGlobalState } from '../context/GlobalContextProvider';
+import React from "react";
+import Calendar from "react-calendar";
+import "react-calendar/dist/Calendar.css";
+import styled from "styled-components";
+import { useGlobalState } from "../context/GlobalContextProvider";
 
+// This function simply renders the CalendarContainer component that contains a Calendar component
 function Page() {
-  const {theme} = useGlobalState();
+  const { theme } = useGlobalState();
   return (
     <CalendarContainer theme={theme}>
       <Calendar />
     </CalendarContainer>
   );
 }
-
-
 
 const CalendarContainer = styled.div`
   position: fixed;
@@ -32,14 +31,14 @@ const CalendarContainer = styled.div`
     width: 100%;
     height: 100%;
     bottom: 2.5rem;
-  
+
     .react-calendar__tile {
-      font-size: 1em !important; 
-      line-height: 5.5em !important; 
+      font-size: 1em !important;
+      line-height: 5.5em !important;
     }
   }
 
-  .react-calendar { 
+  .react-calendar {
     width: 100%;
     max-width: 100%;
     height: 100%;
@@ -52,14 +51,12 @@ const CalendarContainer = styled.div`
     line-height: 1.125em;
   }
 
-  
   .react-calendar__tile {
-    font-size: 1.5em; 
-    line-height: 7.2em; 
+    font-size: 1.5em;
+    line-height: 7.2em;
   }
-  .react-calendar__year-view{
-    font-size: .95em; 
-  
+  .react-calendar__year-view {
+    font-size: 0.95em;
   }
   .react-calendar__navigation button {
     color: ${(props) => props.theme.colorPurple2};
@@ -70,67 +67,67 @@ const CalendarContainer = styled.div`
   }
   .react-calendar__tile:enabled:hover,
   .react-calendar__tile:enabled:focus {
-   background: ${(props) => props.theme.calendarBg};
-   color: ${(props) => props.theme.colorPurple2};
-   border-radius: 6px;
+    background: ${(props) => props.theme.calendarBg};
+    color: ${(props) => props.theme.colorPurple2};
+    border-radius: 6px;
   }
   .react-calendar__tile--now {
     background: ${(props) => props.theme.calendarBg2};
     border-radius: 6px;
     font-weight: bold;
     color: ${(props) => props.theme.colorPurple2};
-   }
-   .react-calendar__tile--now:enabled:hover,
-.react-calendar__tile--now:enabled:focus {
- background: ${(props) => props.theme.calendarBg2};
- border-radius: 6px;
- font-weight: bold;
- color: ${(props) => props.theme.colorPurple2};
-}
-.react-calendar__tile--hasActive:enabled:hover,
-.react-calendar__tile--hasActive:enabled:focus {
- background: ${(props) => props.theme.calendarBg};
-}
-.react-calendar__tile--active {
-  background: ${(props) => props.theme.colorPurple2};
-  border-radius: 6px;
-  font-weight: bold;
-  color: white;
- }
- .react-calendar__tile--active:enabled:hover,
-.react-calendar__tile--active:enabled:focus {
- background: ${(props) => props.theme.colorPurple2};
- color: white;
-}
-.react-calendar--selectRange .react-calendar__tile--hover {
-  background-color: ${(props) => props.theme.calendarBg};
- }
- .react-calendar__tile--range {
-  background: ${(props) => props.theme.calendarBg};
-  color: ${(props) => props.theme.colorPurple2};
-  border-radius: 0;
- }
- .react-calendar__tile--rangeStart {
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
-  border-top-left-radius: 6px;
-  border-bottom-left-radius: 6px;
-  background: ${(props) => props.theme.colorPurple2};
-  color: white;
- }
- .react-calendar__tile--rangeEnd {
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
-  border-top-right-radius: 6px;
-  border-bottom-right-radius: 6px;
-  background: ${(props) => props.theme.colorPurple2};
-  color: white;
- }
- .react-calendar__month-view__weekdays {
-  background: ${(props) => props.theme.colorBg};
-  color: ${(props) => props.theme.colorPurple2};
-  font-size: 1.2em;
-  line-height: 2.5em; 
- }
+  }
+  .react-calendar__tile--now:enabled:hover,
+  .react-calendar__tile--now:enabled:focus {
+    background: ${(props) => props.theme.calendarBg2};
+    border-radius: 6px;
+    font-weight: bold;
+    color: ${(props) => props.theme.colorPurple2};
+  }
+  .react-calendar__tile--hasActive:enabled:hover,
+  .react-calendar__tile--hasActive:enabled:focus {
+    background: ${(props) => props.theme.calendarBg};
+  }
+  .react-calendar__tile--active {
+    background: ${(props) => props.theme.colorPurple2};
+    border-radius: 6px;
+    font-weight: bold;
+    color: white;
+  }
+  .react-calendar__tile--active:enabled:hover,
+  .react-calendar__tile--active:enabled:focus {
+    background: ${(props) => props.theme.colorPurple2};
+    color: white;
+  }
+  .react-calendar--selectRange .react-calendar__tile--hover {
+    background-color: ${(props) => props.theme.calendarBg};
+  }
+  .react-calendar__tile--range {
+    background: ${(props) => props.theme.calendarBg};
+    color: ${(props) => props.theme.colorPurple2};
+    border-radius: 0;
+  }
+  .react-calendar__tile--rangeStart {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+    background: ${(props) => props.theme.colorPurple2};
+    color: white;
+  }
+  .react-calendar__tile--rangeEnd {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+    background: ${(props) => props.theme.colorPurple2};
+    color: white;
+  }
+  .react-calendar__month-view__weekdays {
+    background: ${(props) => props.theme.colorBg};
+    color: ${(props) => props.theme.colorPurple2};
+    font-size: 1.2em;
+    line-height: 2.5em;
+  }
 `;
 export default Page;

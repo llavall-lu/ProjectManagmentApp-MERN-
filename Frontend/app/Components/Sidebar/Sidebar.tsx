@@ -1,84 +1,95 @@
 "use client";
-import { useGlobalState } from '@/app/context/GlobalContextProvider';
-import React from 'react'
-import styled from 'styled-components';
-import Image from 'next/image';
-import menu from '@/app/utils/menu';
-import { usePathname, useRouter } from 'next/navigation';
-import Button from '@/app/Components/Button/btn';
-import { arrowLeft, navbars, signout } from '@/app/utils/icons';
-import { UserButton, useClerk, useUser } from '@clerk/nextjs';
-
-
+import { useGlobalState } from "@/app/context/GlobalContextProvider";
+import React from "react";
+import styled from "styled-components";
+import Image from "next/image";
+import menu from "@/app/utils/menu";
+import { usePathname, useRouter } from "next/navigation";
+import Button from "@/app/Components/Button/btn";
+import { arrowLeft, navbars, signout } from "@/app/utils/icons";
+import { UserButton, useClerk, useUser } from "@clerk/nextjs";
 
 function Sidebar() {
-  const {theme, collapsed, collapsedSidebar} = useGlobalState();
-  const { signOut } = useClerk();
-  const { user } = useUser();
+  // Use global state to get theme, collapsed, and collapsedSidebar
+  const { theme, collapsed, collapsedSidebar } = useGlobalState();
+  const { signOut } = useClerk(); // Use clerk to get the signOut function
+  const { user } = useUser(); // Use clerk to get the user
   console.log(user);
 
+  // Destructure the user object to get the first name, last name, and image url
+  const { firstName, lastName, imageUrl } = user || {
+    firstName: "",
+    lastName: "",
+    imageUrl: "",
+  };
+  // Use the next router to get the path name
+  const router = useRouter();
+  const pathName = usePathname();
 
-  const { firstName, lastName, imageUrl} = user || {firstName: "", lastName: "", imageUrl: ""}
-const router = useRouter();
-const pathName = usePathname();
-
+  // Handle the click event for the sidebar items
   const handleClick = (a: string) => {
     router.push(a);
   };
 
   console.log(theme);
 
-  return ( <SidebarStyle theme={theme} collapsed={collapsed}>
-    <button className="nav-toggle" onClick={collapsedSidebar}>
-      {collapsed ? navbars : arrowLeft}
-    </button>
-    <div className='profile'>
-      <div className='profile-overlay'></div>
-      <div className='image'>
-        <Image width={70} height={70} src={imageUrl} alt="profile" />
-      </div>
-        <div className="user-btn absolute z-20 top-0 w-full h-full">
-          <UserButton/>
+  return (
+    <SidebarStyle theme={theme} collapsed={collapsed}>
+      {/* Button to toggle sidebar */}
+      <button className="nav-toggle" onClick={collapsedSidebar}>
+        {collapsed ? navbars : arrowLeft}
+      </button>
+
+      {/* User profile section */}
+      <div className="profile">
+        <div className="profile-overlay"></div>
+        <div className="image">
+          <Image width={70} height={70} src={imageUrl} alt="profile" />
         </div>
-      <h1 className='capitalize'>
+        <div className="user-btn absolute z-20 top-0 w-full h-full">
+          <UserButton />
+        </div>
+        <h1 className="capitalize">
           {firstName} {lastName}
-      </h1>
-    </div>
-    <ul className='nav-items'>
-      {menu.map((item) => {
+        </h1>
+      </div>
 
-        const link = item.link;
+      {/* Navigation items */}
+      <ul className="nav-items">
+        {menu.map((item) => {
+          const link = item.link;
 
-        return (
-        <li 
-        key={item.id}
-        className={`nav-item ${pathName === link ? 'active' : ''}`}
-        onClick={() => handleClick(link)}
-        >
-          {item.icon}
-          <a href={link}>{item.title}</a>
-        </li>
-        );
-      })}
-    </ul>
-    <div className="signOut cl-userButtonPopoverActionButton__signOut">
-      <Button
-        name={"Sign Out"}
-        background={theme.colorRed}
-        padding={"0.8rem 1rem"}
-        borderRadius={"0.5rem"}
-        fontWeight={"500"}
-        fontSize={"1rem"}
-        icon={signout}
-        click={() => signOut(() => router.push("/signin"))}
-      />
-    </div>
-  </SidebarStyle>
+          return (
+            <li
+              key={item.id}
+              className={`nav-item ${pathName === link ? "active" : ""}`}
+              onClick={() => handleClick(link)}
+            >
+              {item.icon}
+              <a href={link}>{item.title}</a>
+            </li>
+          );
+        })}
+      </ul>
+
+      {/* Sign out button */}
+      <div className="signOut cl-userButtonPopoverActionButton__signOut">
+        <Button
+          name={"Sign Out"}
+          background={theme.colorRed}
+          padding={"0.8rem 1rem"}
+          borderRadius={"0.5rem"}
+          fontWeight={"500"}
+          fontSize={"1rem"}
+          icon={signout}
+          click={() => signOut(() => router.push("/signin"))}
+        />
+      </div>
+    </SidebarStyle>
   );
 }
 
-
-const SidebarStyle = styled.nav<{collapsed: boolean}>`
+const SidebarStyle = styled.nav<{ collapsed: boolean }>`
   position: relative;
   width: ${(props) => props.theme.sidebarWidth};
   background-color: ${(props) => props.theme.colorBg2};
@@ -104,31 +115,30 @@ const SidebarStyle = styled.nav<{collapsed: boolean}>`
   }
   .nav-toggle {
     display: none;
-  position: absolute;
-  top: 5rem;
-  right: -3rem;
-  padding: 1rem;
-  border-top-right-radius: 1rem;
-  border-bottom-right-radius: 1rem;
-  background-color: ${(props) => props.theme.colorBg2};
-  border-right: 2px solid ${(props) => props.theme.borderColor2};
+    position: absolute;
+    top: 5rem;
+    right: -3rem;
+    padding: 1rem;
+    border-top-right-radius: 1rem;
+    border-bottom-right-radius: 1rem;
+    background-color: ${(props) => props.theme.colorBg2};
+    border-right: 2px solid ${(props) => props.theme.borderColor2};
   }
 
+  .cl-internal-wkkub3 {
+    display: none;
+  }
 
-.cl-internal-wkkub3{
-  display: none;
-}
-
-  .user-btn { 
-    .cl-rootBox{
+  .user-btn {
+    .cl-rootBox {
       width: 100%;
       height: 100%;
 
-      .cl-userButtonBox{
+      .cl-userButtonBox {
         width: 100%;
         height: 100%;
 
-        .cl-userButtonTrigger{
+        .cl-userButtonTrigger {
           width: 100%;
           height: 100%;
           opacity: 0;
@@ -147,7 +157,6 @@ const SidebarStyle = styled.nav<{collapsed: boolean}>`
     color: ${(props) => props.theme.colorGrey0};
     display: flex;
     align-items: center;
-    
 
     .profile-overlay {
       position: absolute;
@@ -193,7 +202,7 @@ const SidebarStyle = styled.nav<{collapsed: boolean}>`
     }
 
     > h1 {
-      margin-left: .3rem;
+      margin-left: 0.3rem;
       font-size: clamp(1.2rem, 4vw, 1.4rem);
       line-height: 100%;
     }
@@ -206,8 +215,7 @@ const SidebarStyle = styled.nav<{collapsed: boolean}>`
     }
   }
 
-.nav-item {
-
+  .nav-item {
     position: relative;
     padding: 0.8rem 1rem 0.9rem 2rem;
     margin: 0.3rem 0;
@@ -216,7 +224,7 @@ const SidebarStyle = styled.nav<{collapsed: boolean}>`
     grid-template-columns: 40px 1fr;
     cursor: pointer;
     align-items: center;
-    
+
     &::after {
       position: absolute;
       content: "";
@@ -262,7 +270,6 @@ const SidebarStyle = styled.nav<{collapsed: boolean}>`
     }
   }
 
-
   .active {
     background-color: ${(props) => props.theme.activeNavLink};
 
@@ -276,17 +283,15 @@ const SidebarStyle = styled.nav<{collapsed: boolean}>`
     width: 0.3rem;
   }
 
-  >button {
+  > button {
     margin: 1.5rem;
   }
-  
+
   .signOut {
     display: flex;
     justify-content: center;
     align-items: center;
-    
   }
+`;
 
-  `;
-
-export default Sidebar
+export default Sidebar;

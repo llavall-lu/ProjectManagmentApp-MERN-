@@ -27,15 +27,15 @@ const menu = [
   },
   {
     id: 5,
-    title: 'Calendar',
-    icon: todo, 
-    link: '/calendar'
+    title: "Calendar",
+    icon: todo,
+    link: "/calendar",
   },
   {
     id: 6,
-    title: 'Chat',
-    icon: todo, 
-    link: '/chat'
+    title: "Chat",
+    icon: todo,
+    link: "/chat",
   },
 ];
 

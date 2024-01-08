@@ -1,46 +1,48 @@
 "use client";
-import { useGlobalState } from '@/app/context/GlobalContextProvider'
-import React from 'react'
-import styled from 'styled-components'
-import TaskObject from '../TaskObject/TaskObject';
-import { plusA } from '@/app/utils/icons';
-import CreateTask from '../modal/CreateTask';
-import Modal from '../modal/Modal';
-
+import { useGlobalState } from "@/app/context/GlobalContextProvider";
+import React from "react";
+import styled from "styled-components";
+import TaskObject from "../TaskObject/TaskObject";
+import { plusA } from "@/app/utils/icons";
+import CreateTask from "../modal/CreateTask";
+import Modal from "../modal/Modal";
 
 interface Props {
+  // this is the interface for the props
   title: string;
   tasks: any[];
 }
 
 function tasks({ title, tasks }: Props) {
-    const {theme, isLoading, openModal, modal} = useGlobalState();
+  const { theme, isLoading, openModal, modal } = useGlobalState(); // this references the global state
 
-   // const isLoading = true; //TODO: uncomment this line to enable the loading spinner for testing
+  // const isLoading = true;
 
   return (
     <TaskStyle theme={theme}>
-    {/* <CreateTask /> */}  //TODO: uncomment this line to enable the create task modal for testing
-
-{modal && <Modal taskContent={<CreateTask />} />}
+      {" "}
+      {/* <CreateTask /> Uncomment this for task testing in the event the modal is not working */}
+      {modal && <Modal taskContent={<CreateTask />} />}{" "}
+      {/* this is the modal that will be displayed when the user clicks on the add task button */}
       <h1>{title}</h1>
-    <div className="tasks grid">
-      {tasks.map((task) => (
-        <TaskObject 
-          key={task.id}
-          title={task.title}
-          description={task.description}
-          date={task.date}
-          isCompleted={task.isCompleted}
-          id={task.id}
-        />
-      ))}
-      <button className="create-task" onClick={openModal}>
-        {plusA}
-        Add Task
-      </button>
-    </div> 
-
+      <div className="tasks grid">
+        {tasks.map((task) => (
+          <TaskObject
+            key={task.id}
+            title={task.title}
+            description={task.description}
+            date={task.date}
+            isCompleted={task.isCompleted}
+            id={task.id}
+          />
+        ))}
+        <button className="create-task" onClick={openModal}>
+          {" "}
+          {/*  this is the button that will create the task */}
+          {plusA}
+          Add Task
+        </button>
+      </div>
     </TaskStyle>
   );
 }
@@ -98,12 +100,6 @@ const TaskStyle = styled.main`
             color: ${(props) => props.theme.colorGrey2};
         }
     }
+`;
 
-
-    
-
-`
-
-
-
-export default tasks
+export default tasks;

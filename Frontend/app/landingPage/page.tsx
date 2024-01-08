@@ -1,22 +1,25 @@
 "use client";
-import React from 'react'
-import styled from 'styled-components';
-import Navbar from '../Components/Nav/Nav';
-import { useGlobalState } from '../context/GlobalContextProvider';
+import React from "react";
+import styled from "styled-components";
+import Navbar from "../Components/Nav/Nav";
+import { useGlobalState } from "../context/GlobalContextProvider";
 
 const HomePage = () => {
-  const {theme} = useGlobalState();
+  const { theme } = useGlobalState();
   return (
     <Container theme={theme}>
       <Box theme={theme}>
-      <Navbar />
+        <Navbar />
         <Title>Welcome to Project Manager</Title>
         <Title>For all your project management needs</Title>
-        <Description>Welcome to my free project management website that can be used with a simple sign up</Description>
+        <Description>
+          Welcome to my free project management website that can be used with a
+          simple sign up
+        </Description>
       </Box>
     </Container>
-  )
-}
+  );
+};
 
 const Container = styled.div`
   display: flex;
@@ -25,7 +28,8 @@ const Container = styled.div`
   justify-content: center;
   height: 100%;
   padding: 20px;
-  background: ${({ theme }) => `linear-gradient(45deg, ${theme.calendarBg2} 20%, ${theme.colorPurple} 90%)`};
+  background: ${({ theme }) =>
+    `linear-gradient(45deg, ${theme.calendarBg2} 20%, ${theme.colorPurple} 90%)`};
 `;
 
 const Box = styled.div`
@@ -36,10 +40,9 @@ const Box = styled.div`
   width: 60%;
   height: 40%;
   padding: 20px;
-  background-color:${({ theme }) => theme.colorBg2};
+  background-color: ${({ theme }) => theme.colorBg2};
   border-radius: 10px;
   box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
-  
 `;
 
 const Title = styled.h1`
