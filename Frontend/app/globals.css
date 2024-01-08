@@ -52,4 +52,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 input [type=checkbox] {
   filter: invert(1);
   cursor: pointer;
-}
+}/* General styling for the chat container */
+
+
+
+

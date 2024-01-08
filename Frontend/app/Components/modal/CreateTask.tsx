@@ -25,22 +25,22 @@ const [badDate, setBadDate] = useState('');
 const handlechange =  (name: string) => (e: any) => {
 
     switch (name) {
-        case 'title':
+        case 'title':   // Update the title when the title input changes
             setTitle(e.target.value)
             break;
-        case 'description':
+        case 'description': // Update the description when the description input changes
             setDescription(e.target.value)
             break;
-        case 'date':
+        case 'date':    // Update the date when the date input changes
             setDate(e.target.value)
             break;
         case 'time': // Update the time when the time input changes
             setTime(e.target.value)
             break;
-        case 'completed':
+        case 'completed':   // Update the completed when the completed input changes
             setCompleted(e.target.checked)
             break;
-        case 'important':
+        case 'important':   // Update the important when the important input changes
             setImportant(e.target.checked)
             break;
         default:
@@ -49,63 +49,61 @@ const handlechange =  (name: string) => (e: any) => {
 };
 
 const handleSubmit = async (e: any) => {
-    console.log("handleSubmit called");
+    console.log("handleSubmit called"); 
     e.preventDefault();
 
-    if (title.length < 3) {
+    if (title.length < 3) { // Title length validation
         console.log('Validation triggered');
         setU3TitleError('Title must be at least 3 characters long');
         toast.error('Title must be at least 3 characters long');
         return;
       } else {
-        setU3TitleError('');
+        setU3TitleError('');    // sets error to empty string
       }
 
-      if (!description) {
+      if (!description) {   // Description length validation
         console.log('Validation triggered');
         setNoDescriptionError('Description is required');
         toast.error('Description is required');
         return;
     }else {
-        setNoDescriptionError('');
+        setNoDescriptionError('');  // sets error to empty string
     }
 
-       if (title.length > 32) {
+       if (title.length > 32) { // Title length validation
         setO32TitleError('Title must not exceed 32 characters');
         toast.error('Title must not exceed 32 characters');
         return;
     } else {
-        setO32TitleError('');
+        setO32TitleError('');   // sets error to empty string
     }
 
-    // Description length validation
-    if (description.length > 200) {
+    if (description.length > 200) { // Description length validation
         setO200DescriptionError('Description must not exceed 200 characters');
         toast.error('Description must not exceed 200 characters');
         return;
     } else {
-        setO200DescriptionError('');
+        setO200DescriptionError(''); // sets error to empty string
     }
 
 
 
-    const taskDateString = `${date}T${time}${new Date().getTimezoneOffset() < 0 ? '+' : '-'}${Math.abs(new Date().getTimezoneOffset() / 60).toString().padStart(2, '0')}:00`; 
+    const taskDateString = `${date}T${time}${new Date().getTimezoneOffset() < 0 ? '+' : '-'}${Math.abs(new Date().getTimezoneOffset() / 60).toString().padStart(2, '0')}:00`;  
     const taskDate = new Date(taskDateString);
     const currentDate = new Date();
     
-    if (taskDate.getTime() <= currentDate.getTime() + 60000) {
+    if (taskDate.getTime() <= currentDate.getTime() + 60000) { // Date validation, Makes sure the task is at least 1 minute in the future
         toast.error('Task must be at least 1 minute in the future');
         setBadDate("Task must be at least 1 minute in the future")
         return;
     }else{
-        toast.success('Task created successfully');
-        setBadDate("")
+        setBadDate("") // sets error to empty string
     }
 
     const task = {
-        title,
+        title,  
         description,
-        date: taskDate.toISOString(),
+        date: taskDate.toISOString(),   // Converts the date to ISO format
         completed,
         important
     };

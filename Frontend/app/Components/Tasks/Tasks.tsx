@@ -20,7 +20,7 @@ function tasks({ title, tasks }: Props) {
 
   return (
     <TaskStyle theme={theme}>
-{/* <CreateTask /> */} 
+    {/* <CreateTask /> */}  //TODO: uncomment this line to enable the create task modal for testing
 
 {modal && <Modal taskContent={<CreateTask />} />}
       <h1>{title}</h1>

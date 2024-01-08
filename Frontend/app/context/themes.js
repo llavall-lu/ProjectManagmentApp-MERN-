@@ -24,7 +24,6 @@ const themes = [
     colorIcons2: "rgba(249,249,249, 0.75)",
     shadow: "1px 7px 12px rgba(8, 18, 69, 0.1)",
     colorBtnRed: "#fe6854",
-    
     colorBtnGreen: "#27AE60",
   },
   {
