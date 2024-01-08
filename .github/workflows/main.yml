@@ -18,9 +18,6 @@ jobs:
       uses: actions/setup-node@v2
       with:
         node-version: ${{ matrix.node-version }}
-
-    - name: Change to Project Directory
-      run: cd Frontend
   
     - name: Install Dependencies
       run: npm install
